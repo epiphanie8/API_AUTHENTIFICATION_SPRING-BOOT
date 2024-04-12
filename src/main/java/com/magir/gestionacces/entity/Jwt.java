@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
+@Setter
 @Builder //Builder permet de creer des instance automatiquement
 @NoArgsConstructor
 @AllArgsConstructor

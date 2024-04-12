@@ -66,5 +66,12 @@ public class UtilisateurController {
 		
 	}
 	
+	@PostMapping("deconnexion")
+	public void deconnexion() {
+		jwtService.deconnexion();
+		
+	}
+
+	
 
 }
