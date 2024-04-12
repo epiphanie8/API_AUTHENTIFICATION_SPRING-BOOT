@@ -1,6 +1,7 @@
 package com.magir.gestionacces.security;
 
 import java.security.Key;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +29,9 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Transactional
 @AllArgsConstructor
 @Service
@@ -179,7 +183,12 @@ public class JwtService {
 		jwt.setDesactiver(true);
 		this.jwtRepository.save(jwt);
 		}
-	
-
+		
+	//pour programmer une tache qui permet de vider la table jwt a un moment bien precis
+		@Scheduled(cron = "0 */1 * * * *") //toutes les seconde, chaque minutes,tous les jour du mois,tous les mois,tous les jour de la semaine
+		public void removeUselessJwt() {
+			log.info("suppression des token à {}", Instant.now());
+			jwtRepository.deleteAllByExpireAndDesactiver(true, true);
+		}
 
 }
